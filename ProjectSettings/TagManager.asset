@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 233158965
+    locked: 0
+  - name: Instance
+    uniqueID: 4155184685
+    locked: 0
+  - name: TerrainBase
+    uniqueID: 3337630341
+    locked: 0
+  - name: Foreground
+    uniqueID: 2203928159
+    locked: 0
