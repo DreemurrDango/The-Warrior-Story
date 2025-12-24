@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.dreemurrstudio.collectionextension": {
+      "version": "https://github.com/DreemurrDango/CollectionExtension.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "2ff44eef3d18dd811fa0e1d2cbae0da3ca9e70ea"
+    },
     "com.unity.2d.animation": {
       "version": "9.1.3",
       "depth": 1,
