@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "com.dreemurrstudio.collectionextension": "https://github.com/DreemurrDango/CollectionExtension.git",
+    "com.dreemurrstudio.utilities": "https://github.com/DreemurrDango/unitypackages-utilities.git",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.ide.visualstudio": "2.0.22",
+    "com.unity.inputsystem": "1.11.2",
     "com.unity.nuget.newtonsoft-json": "3.2.2",
     "com.unity.render-pipelines.universal": "14.0.11",
     "com.unity.test-framework": "1.1.33",
