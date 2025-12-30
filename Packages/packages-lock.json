@@ -7,6 +7,15 @@
       "dependencies": {},
       "hash": "2ff44eef3d18dd811fa0e1d2cbae0da3ca9e70ea"
     },
+    "com.dreemurrstudio.timer": {
+      "version": "https://github.com/DreemurrDango/unitypackages-timer.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.textmeshpro": "1.0.0"
+      },
+      "hash": "c3b3038c6c0ab97cd1d2240ee3a4bdd30f3974b4"
+    },
     "com.dreemurrstudio.utilities": {
       "version": "https://github.com/DreemurrDango/unitypackages-utilities.git",
       "depth": 0,

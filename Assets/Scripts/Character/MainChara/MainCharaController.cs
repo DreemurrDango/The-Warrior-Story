@@ -10,6 +10,7 @@ public class MainCharaController : MonoBehaviour
     private static int AnimParam_HorizontalInput = Animator.StringToHash("horizontalInput");
     private static int AnimParam_VerticalVelocity = Animator.StringToHash("verticalVelocity");
     private static int AnimParam_InAir = Animator.StringToHash("inAir");
+    private static int AnimParam_InCrouch = Animator.StringToHash("inCrouch");
     //private static int AnimParam_KeepWalking = Animator.StringToHash("keepWalking");
 
     [Header("组件引用")]
@@ -21,6 +22,12 @@ public class MainCharaController : MonoBehaviour
     [SerializeField]
     [Tooltip("角色刚体组件")]
     private Rigidbody2D rigidbody2D;
+    [SerializeField]
+    [Tooltip("角色正常状态下的碰撞盒")]
+    private Collider2D normalCollider2D;
+    [SerializeField]
+    [Tooltip("下蹲时使用固定碰撞盒")]
+    private Collider2D crouchCollider2D;
     [SerializeField]
     [Tooltip("地面检测组件")]
     private OnGroundCheck onGroundCheck;
@@ -67,6 +74,10 @@ public class MainCharaController : MonoBehaviour
     /// 获取当前是否在地面上
     /// </summary>
     public bool OnGround => onGroundCheck.OnGround;
+    /// <summary>
+    /// 获取当前是否在下蹲
+    /// </summary>
+    public bool InCrouch => inputDirection.y < -0.5f;
     /// <summary>
     /// 获取当前最大水平速度
     /// </summary>
@@ -116,28 +127,41 @@ public class MainCharaController : MonoBehaviour
 
     private void Update()
     {
+        // 处理下蹲状态
+        normalCollider2D.enabled = !InCrouch;
+        crouchCollider2D.enabled = InCrouch;
         // 更新动画参数
         var horizontalInput = inKeepWalking ? inputDirection.x/2 : inputDirection.x;
         animator.SetFloat(AnimParam_HorizontalInput, Mathf.Abs(horizontalInput));
         animator.SetFloat(AnimParam_VerticalVelocity, rigidbody2D.velocity.y);
         animator.SetBool(AnimParam_InAir, !OnGround);
+        animator.SetBool(AnimParam_InCrouch, InCrouch);
         //animator.SetBool(AnimParam_KeepWalking, inKeepWalking);
     }
 
     private void FixedUpdate()
     {
-        var normalizedInput = inputDirection.normalized;
-        // 处理水平移动
         inputDirection = playerInput.actions["Move"].ReadValue<Vector2>();
-        // 计算目标速度
-        float targetSpeed = inputDirection.magnitude * MaxHorizontalSpeed;
+        var normalizedInput = inputDirection.normalized;
         float inputX = normalizedInput.x;
-        // 平滑调整当前速度
-        currentXSpeed = Mathf.MoveTowards(currentXSpeed, targetSpeed, (MaxHorizontalSpeed / timeToMaxSpeed) * Time.fixedDeltaTime);
-        // 计算移动向量
-        var moveVector = new Vector2(inputX * currentXSpeed, rigidbody2D.velocity.y);
-        // 应用移动
-        rigidbody2D.velocity = moveVector;
+        if (!InCrouch)
+        {
+            if (UnityEngine.InputSystem.Keyboard.current.anyKey.wasPressedThisFrame) { }
+                // 处理水平移动,计算目标速度
+                float targetSpeed = inputDirection.magnitude * MaxHorizontalSpeed;
+            // 平滑调整当前速度
+            currentXSpeed = Mathf.MoveTowards(currentXSpeed, targetSpeed, (MaxHorizontalSpeed / timeToMaxSpeed) * Time.fixedDeltaTime);
+            // 计算移动向量
+            var moveVector = new Vector2(inputX * currentXSpeed, rigidbody2D.velocity.y);
+            // 应用移动
+            rigidbody2D.velocity = moveVector;
+        }
+        else
+        {
+            // 下蹲时不可移动，并且水平速度归零
+            rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+            currentXSpeed = 0;
+        }
         // 更新角色朝向
         if (inputX != 0)
         {
