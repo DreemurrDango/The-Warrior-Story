@@ -69,6 +69,10 @@ public class MainCharaController : MonoBehaviour
     /// 当前可用的连续跳跃次数
     /// </summary>
     private float leftJumpTimes = 0;
+    /// <summary>
+    /// 输入锁定计时器
+    /// </summary>
+    private float t_lockInput = 0f;
 
     /// <summary>
     /// 获取当前是否在地面上
@@ -94,14 +98,21 @@ public class MainCharaController : MonoBehaviour
         onGroundCheck.OnLandGround += OnLandGround;
     }
 
+    /// <summary>
+    /// 着陆时调用
+    /// </summary>
     private void OnLandGround()
     {
         leftJumpTimes = maxJumpCount;
     }
 
+    /// <summary>
+    /// 跳跃按钮被按下时调用
+    /// </summary>
+    /// <param name="context"></param>
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
-        if (leftJumpTimes <= 0) return;
+        if (leftJumpTimes <= 0 || t_lockInput > 0f) return;
         // 延迟跳跃
         if (onGroundCheck.OnGround && jumpPrepareTime > 0) 
             StartCoroutine(JumpAfterDelay(jumpPrepareTime));
@@ -115,7 +126,7 @@ public class MainCharaController : MonoBehaviour
 
         void DoJump()
         {
-            rigidbody2D.AddForce(Vector2.up * jumpForce);
+            rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             //animator.SetBool(AnimParam_InJumping, true);
             leftJumpTimes--;
         }
@@ -127,6 +138,7 @@ public class MainCharaController : MonoBehaviour
 
     private void Update()
     {
+        if(t_lockInput > 0f) t_lockInput -= Time.deltaTime;
         // 处理下蹲状态
         normalCollider2D.enabled = !InCrouch;
         crouchCollider2D.enabled = InCrouch;
@@ -141,34 +153,45 @@ public class MainCharaController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        inputDirection = playerInput.actions["Move"].ReadValue<Vector2>();
-        var normalizedInput = inputDirection.normalized;
-        float inputX = normalizedInput.x;
-        if (!InCrouch)
+        if (t_lockInput > 0f) return;
+        if (InCrouch)
         {
-            if (UnityEngine.InputSystem.Keyboard.current.anyKey.wasPressedThisFrame) { }
-                // 处理水平移动,计算目标速度
-                float targetSpeed = inputDirection.magnitude * MaxHorizontalSpeed;
+            // 下蹲时不可移动，并且水平速度归零
+            rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+            currentXSpeed = 0;
+        }
+        else HandleHorizontalMove();
+
+        void HandleHorizontalMove()
+        {
+            inputDirection = playerInput.actions["Move"].ReadValue<Vector2>();
+            var normalizedInput = inputDirection.normalized;
+            float inputX = normalizedInput.x;
+            // 处理水平移动,计算目标速度
+            float targetSpeed = inputDirection.magnitude * MaxHorizontalSpeed;
             // 平滑调整当前速度
             currentXSpeed = Mathf.MoveTowards(currentXSpeed, targetSpeed, (MaxHorizontalSpeed / timeToMaxSpeed) * Time.fixedDeltaTime);
             // 计算移动向量
             var moveVector = new Vector2(inputX * currentXSpeed, rigidbody2D.velocity.y);
             // 应用移动
             rigidbody2D.velocity = moveVector;
-        }
-        else
-        {
-            // 下蹲时不可移动，并且水平速度归零
-            rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
-            currentXSpeed = 0;
-        }
-        // 更新角色朝向
-        if (inputX != 0)
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = Mathf.Sign(inputX) * Mathf.Abs(scale.x);
-            transform.localScale = scale;
+            // 更新角色朝向
+            if (inputX != 0)
+            {
+                Vector3 scale = transform.localScale;
+                scale.x = Mathf.Sign(inputX) * Mathf.Abs(scale.x);
+                transform.localScale = scale;
+            }
         }
     }
 
+    /// <summary>
+    /// 锁定输入一段时间，若未指定则永久锁定
+    /// </summary>
+    /// <param name="lockTime">要持续锁定的时间，若忽略则为一个极长的时间，可视为永久锁定</param>
+    public void LockInput(float lockTime = 9999f) => t_lockInput = lockTime;
+    /// <summary>
+    /// 取消锁定输入
+    /// </summary>
+    public void UnlockInput() => t_lockInput = 0f;
 }

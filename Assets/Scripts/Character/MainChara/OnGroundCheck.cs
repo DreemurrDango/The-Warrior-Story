@@ -22,7 +22,7 @@ public class OnGroundCheck : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log($"触碰到了{collision.gameObject}");
+        //Debug.Log($"触碰到了{collision.gameObject}");
         if (collision.CompareTag("Ground"))
         {
             onGround = true;
@@ -32,7 +32,7 @@ public class OnGroundCheck : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log($"离开了{collision.gameObject}");
+        //Debug.Log($"离开了{collision.gameObject}");
         if (collision.CompareTag("Ground"))
         {
             onGround = false;

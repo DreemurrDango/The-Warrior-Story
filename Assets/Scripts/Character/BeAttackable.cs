@@ -10,22 +10,16 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class BeAttackable : MonoBehaviour
 {
-    public Action<CharaBase,AttackType,DamageType,float> OnBeAttack;
+    /// <summary>
+    /// 受到攻击时触发的事件
+    /// </summary>
+    public event Action<CharaBase,AttackType,DamageType,float> OnBeAttack;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        AttackEffect attackEffect = collision.GetComponent<AttackEffect>();
-        if (attackEffect != null)
-        {
-            CharaBase sourceChara = attackEffect.sourceChara;
-            AttackType attackType = attackEffect.attackType;
-            DamageType damageType = attackEffect.damageType;
-            float damageValue = attackEffect.baseDamageValue;
-            OnBeAttack?.Invoke(sourceChara, attackType, damageType, damageValue);
-        }
-    }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        
+        Debug.Log($"{transform.parent.name}的受击盒检测到{collision.name}进入");
+        var ae = collision.GetComponent<AttackEffect>();
+        if (ae == null) return;
+        OnBeAttack?.Invoke(ae.sourceChara, ae.attackType, ae.damageType, ae.baseDamageValue);
     }
 }

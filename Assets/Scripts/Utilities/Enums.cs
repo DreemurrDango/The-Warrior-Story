@@ -17,9 +17,9 @@ namespace Enums
     /// </summary>
     public enum DamageType
     {
-        Physical,
-        Magical,
-        True,
+        物理,
+        魔法,
+        真实,
         COUNT
     }
 }
