@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class MainCharaController : MonoBehaviour
 {
@@ -11,7 +12,8 @@ public class MainCharaController : MonoBehaviour
     private static int AnimParam_VerticalVelocity = Animator.StringToHash("verticalVelocity");
     private static int AnimParam_InAir = Animator.StringToHash("inAir");
     private static int AnimParam_InCrouch = Animator.StringToHash("inCrouch");
-    //private static int AnimParam_KeepWalking = Animator.StringToHash("keepWalking");
+    private static int AnimParam_InAttack = Animator.StringToHash("inAttack");
+    private static int AnimParam_DoCriticalHit = Animator.StringToHash("doCritical");
 
     [Header("组件引用")]
     [SerializeField]
@@ -52,7 +54,16 @@ public class MainCharaController : MonoBehaviour
     [Tooltip("跳跃预备时间")]
     private float jumpPrepareTime = 0.1f;
 
-    [ReadOnly,SerializeField]
+    [Header("攻击配置")]
+    [SerializeField]
+    [Tooltip("攻击效果列表")]
+    private AttackEffect[] attackEffects;
+    [SerializeField]
+    [Tooltip("暴击率")]
+    [Range(0.01f, 1f)]
+    private float criticalHitRate = 0.1f;
+
+    [ReadOnly, SerializeField]
     /// <summary>
     /// 输入的方向向量
     /// </summary>
@@ -73,6 +84,10 @@ public class MainCharaController : MonoBehaviour
     /// 输入锁定计时器
     /// </summary>
     private float t_lockInput = 0f;
+    /// <summary>
+    /// 此次攻击是否为暴击
+    /// </summary>
+    private bool isCriticalHit = false;
 
     /// <summary>
     /// 获取当前是否在地面上
@@ -83,17 +98,27 @@ public class MainCharaController : MonoBehaviour
     /// </summary>
     public bool InCrouch => inputDirection.y < -0.5f;
     /// <summary>
+    /// 是否正在攻击
+    /// </summary>
+    public bool InAttack { get; private set; }
+    /// <summary>
+    /// 是否处于输入锁定状态
+    /// </summary>
+    public bool InInputLocking => t_lockInput > 0f;
+
+    /// <summary>
     /// 获取当前最大水平速度
     /// </summary>
     public float MaxHorizontalSpeed => inKeepWalking ? maxWalkSpeed : maxRunSpeed;
 
     private void Awake()
     {
-        if(playerInput == null) throw new Exception("PlayerInput组件未绑定");
-        playerInput.actions["Fire"].performed += OnFirePerformed;
+        if (playerInput == null) throw new Exception("PlayerInput组件未绑定");
         playerInput.actions["Jump"].started += OnJumpStarted;
         playerInput.actions["KeepWalk"].started += ctx => inKeepWalking = true;
         playerInput.actions["KeepWalk"].canceled += ctx => inKeepWalking = false;
+        playerInput.actions["Fire"].started += ctx => InAttack = true;
+        playerInput.actions["Fire"].canceled += ctx => InAttack = false;
         if (onGroundCheck == null) throw new Exception("OnGroundCheck组件未绑定");
         onGroundCheck.OnLandGround += OnLandGround;
     }
@@ -112,13 +137,13 @@ public class MainCharaController : MonoBehaviour
     /// <param name="context"></param>
     private void OnJumpStarted(InputAction.CallbackContext context)
     {
-        if (leftJumpTimes <= 0 || t_lockInput > 0f) return;
+        if (leftJumpTimes <= 0 || InInputLocking) return;
         // 延迟跳跃
-        if (onGroundCheck.OnGround && jumpPrepareTime > 0) 
+        if (onGroundCheck.OnGround && jumpPrepareTime > 0)
             StartCoroutine(JumpAfterDelay(jumpPrepareTime));
         else DoJump();
 
-        IEnumerator JumpAfterDelay(float delay )
+        IEnumerator JumpAfterDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
             DoJump();
@@ -132,31 +157,49 @@ public class MainCharaController : MonoBehaviour
         }
     }
 
-    private void OnFirePerformed(InputAction.CallbackContext context)
-    {
-    }
-
+    /// <summary>
+    /// 上次暴击检测时间戳
+    /// </summary>
+    private float t_lastCriticalCheck = 0f;
     private void Update()
     {
-        if(t_lockInput > 0f) t_lockInput -= Time.deltaTime;
+        if (InInputLocking) t_lockInput -= Time.deltaTime;
         // 处理下蹲状态
         normalCollider2D.enabled = !InCrouch;
         crouchCollider2D.enabled = InCrouch;
+        // 暴击检测
+        if (Time.time > t_lastCriticalCheck + 1f)
+        {
+            isCriticalHit = UnityEngine.Random.value < criticalHitRate;
+            t_lastCriticalCheck = Time.time;
+        }
         // 更新动画参数
-        var horizontalInput = inKeepWalking ? inputDirection.x/2 : inputDirection.x;
+        var horizontalInput = inKeepWalking ? inputDirection.x / 2 : inputDirection.x;
         animator.SetFloat(AnimParam_HorizontalInput, Mathf.Abs(horizontalInput));
         animator.SetFloat(AnimParam_VerticalVelocity, rigidbody2D.velocity.y);
         animator.SetBool(AnimParam_InAir, !OnGround);
         animator.SetBool(AnimParam_InCrouch, InCrouch);
-        //animator.SetBool(AnimParam_KeepWalking, inKeepWalking);
+        animator.SetBool(AnimParam_InAttack, !InInputLocking && InAttack);
+        animator.SetBool(AnimParam_DoCriticalHit, isCriticalHit);
     }
 
     private void FixedUpdate()
     {
-        if (t_lockInput > 0f) return;
-        if (InCrouch)
+        if (InInputLocking) return;
+        // 读取输入方向，计算中间变量
+        inputDirection = playerInput.actions["Move"].ReadValue<Vector2>();
+        var normalizedInput = inputDirection.normalized;
+        float inputX = normalizedInput.x;
+        // 更新角色朝向
+        if (inputX != 0)
         {
-            // 下蹲时不可移动，并且水平速度归零
+            Vector3 scale = transform.localScale;
+            scale.x = Mathf.Sign(inputX) * Mathf.Abs(scale.x);
+            transform.localScale = scale;
+        }
+        if (InCrouch || InAttack)
+        {
+            // 下蹲或攻击时不可移动，并且水平速度归零
             rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
             currentXSpeed = 0;
         }
@@ -164,9 +207,6 @@ public class MainCharaController : MonoBehaviour
 
         void HandleHorizontalMove()
         {
-            inputDirection = playerInput.actions["Move"].ReadValue<Vector2>();
-            var normalizedInput = inputDirection.normalized;
-            float inputX = normalizedInput.x;
             // 处理水平移动,计算目标速度
             float targetSpeed = inputDirection.magnitude * MaxHorizontalSpeed;
             // 平滑调整当前速度
@@ -175,16 +215,10 @@ public class MainCharaController : MonoBehaviour
             var moveVector = new Vector2(inputX * currentXSpeed, rigidbody2D.velocity.y);
             // 应用移动
             rigidbody2D.velocity = moveVector;
-            // 更新角色朝向
-            if (inputX != 0)
-            {
-                Vector3 scale = transform.localScale;
-                scale.x = Mathf.Sign(inputX) * Mathf.Abs(scale.x);
-                transform.localScale = scale;
-            }
         }
     }
 
+    #region 输入锁定
     /// <summary>
     /// 锁定输入一段时间，若未指定则永久锁定
     /// </summary>
@@ -194,4 +228,5 @@ public class MainCharaController : MonoBehaviour
     /// 取消锁定输入
     /// </summary>
     public void UnlockInput() => t_lockInput = 0f;
+    #endregion
 }
