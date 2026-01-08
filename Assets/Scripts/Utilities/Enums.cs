@@ -22,4 +22,14 @@ namespace Enums
         真实,
         COUNT
     }
+
+    /// <summary>
+    /// 方位
+    /// </summary>
+    public enum Direction
+    {
+        Left,
+        Right,
+        COUNT
+    }
 }
