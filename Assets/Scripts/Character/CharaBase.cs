@@ -31,6 +31,15 @@ public abstract class CharaBase : MonoBehaviour
     protected float baseAttackPower = 10f;
 
     /// <summary>
+    /// 用于控制角色动画的Animator组件
+    /// </summary>
+    protected Animator animator;
+    /// <summary>
+    /// 2D物理刚体组件
+    /// </summary>
+    protected Rigidbody2D rigidbody2D;
+
+    /// <summary>
     /// 角色是否存活
     /// </summary>
     public bool IsAlive => health > 0f;
@@ -39,9 +48,11 @@ public abstract class CharaBase : MonoBehaviour
     /// </summary>
     public int Health => (int)health;
 
-    private void Awake()
+    protected void Awake()
     {
         if(beAttackable != null)beAttackable.OnBeAttack += OnBeAttack;
+        animator = GetComponent<Animator>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     protected abstract void OnBeAttack(CharaBase sourceChara, AttackType attackType, DamageType damageType, float damageValue);

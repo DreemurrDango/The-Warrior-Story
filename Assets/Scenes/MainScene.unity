@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 300129693}
   - component: {fileID: 300129692}
   m_Layer: 7
-  m_Name: LeftEdgeCheck
+  m_Name: FrontEdgeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -322,7 +322,7 @@ Transform:
   m_GameObject: {fileID: 300129690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -970,7 +970,7 @@ Tilemap:
       - {fileID: 547048930, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: -2076372842, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: 298967955, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
-      m_AnimationSpeed: 6.0000005
+      m_AnimationSpeed: 6
       m_AnimationTimeOffset: 1
       m_Flags: 0
   - first: {x: -5, y: -6, z: 0}
@@ -1179,7 +1179,7 @@ Tilemap:
       - {fileID: 2020624929, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: -1243357737, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: 1781609640, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 1
       m_Flags: 0
   - first: {x: -6, y: -1, z: 0}
@@ -1212,7 +1212,7 @@ Tilemap:
       - {fileID: -907008118, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: -796292832, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: 2073410525, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
-      m_AnimationSpeed: 6.0000005
+      m_AnimationSpeed: 6
       m_AnimationTimeOffset: 1
       m_Flags: 0
   - first: {x: -7, y: 0, z: 0}
@@ -1223,7 +1223,7 @@ Tilemap:
       - {fileID: 2020624929, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: -1243357737, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: 1781609640, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 1
       m_Flags: 0
   - first: {x: -6, y: 0, z: 0}
@@ -1300,7 +1300,7 @@ Tilemap:
       - {fileID: -907008118, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: -796292832, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
       - {fileID: 2073410525, guid: 4ad372a28e6afeb429c57579c42f4aa8, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 1
       m_Flags: 0
   m_TileAssetArray:
@@ -4234,7 +4234,7 @@ CompositeCollider2D:
       - {x: -12.49999, y: -8}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
-  m_UseDelaunayMesh: 0
+  m_UseDelaunayMesh: 1
   m_CompositeGameObject: {fileID: 1055351311}
 --- !u!50 &1055351316
 Rigidbody2D:
@@ -4559,7 +4559,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -1463779217, guid: b2bfb21cd31694d42b156f5f74223c37, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 3, y: 2}
@@ -4600,9 +4600,9 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 3
-  m_Material: {fileID: 6200000, guid: 63d3106c8b222be4db165739906e730c, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4703,8 +4703,10 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(525.227051,92.72727)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-4.772949,122.727264)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-2.397975,116.818588)"},"ID":2,"Name":"Sequence","Instant":false,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.ReturnSuccess","NodeData":{"Offset":"(-126.286865,117.255066)"},"ID":3,"Name":"Return
-        Success","Instant":false,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-1.335144E-05,107.5)"},"ID":4,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"DoCanFrontWalk","NodeData":{"Offset":"(-77.1538239,120.82251)"},"ID":5,"Name":"\u524d\u65b9\u662f\u5426\u53ef\u884c\u8d70","Instant":true,"TerrainEdgeCheckedgeCheck":0},{"Type":"Move","NodeData":{"Offset":"(62.8460846,122.727264)"},"ID":6,"Name":"\u5b9a\u5411\u79fb\u52a8","Instant":true,"SharedVector2moveDirection":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(-1,0)"},"SharedFloatspeed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"walkSpeed","IsShared":true,"Tooltip":"\u6b65\u884c\u901f\u5ea6","SinglemValue":1.5}}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(-6.07146645,120)"},"ID":7,"Name":"Wait","Instant":false,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3}},{"Type":"TurnAround","NodeData":{"Offset":"(123.571442,120)"},"ID":8,"Name":"\u8f6c\u5411","Instant":false,"SharedVector2direction":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(-1,0)"},"Booleaninvert":true,"SharedVector2result":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(-1,0)"}},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(228.260925,119.130432)"},"ID":9,"Name":"Wait","Instant":false,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"walkSpeed","IsShared":true,"Tooltip":"\u6b65\u884c\u901f\u5ea6","SinglemValue":1.5},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"runSpeed","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(-1,0)"}]}'
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(525.227051,92.72727)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-4.772949,122.727264)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-2.397975,116.818588)"},"ID":2,"Name":"Sequence","Instant":false,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.ReturnSuccess","NodeData":{"Offset":"(-206.286865,117.255066)"},"ID":3,"Name":"Return
+        Success","Instant":false,"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-1.335144E-05,107.5)"},"ID":4,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"DoCanFrontWalk","NodeData":{"Offset":"(-127.153824,120.82251)"},"ID":5,"Name":"\u524d\u65b9\u662f\u5426\u53ef\u884c\u8d70","Instant":true,"TerrainEdgeCheckedgeCheck":0},{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator.SetFloatParameter","NodeData":{"Offset":"(13.65564,118.64563)","Comment":"\u8bbe\u7f6e\u52a8\u753b\u5668\u7684\u901f\u5ea6\u53c2\u6570"},"ID":6,"Name":"Set
+        Float Parameter","Instant":true,"SharedGameObjecttargetGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null},"SharedStringparamaterName":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"speed"},"SharedFloatfloatValue":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"walkSpeed","IsShared":true,"Tooltip":"\u6b65\u884c\u901f\u5ea6","SinglemValue":1.5},"BooleansetOnce":false},{"Type":"Move","NodeData":{"Offset":"(152.846085,122.727264)"},"ID":7,"Name":"\u5b9a\u5411\u79fb\u52a8","Instant":true,"SharedVector2moveDirection":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(1,0)"},"SharedFloatspeed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"walkSpeed","IsShared":true,"Tooltip":"\u6b65\u884c\u901f\u5ea6","SinglemValue":1.5}}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator.SetFloatParameter","NodeData":{"Offset":"(-70,120)","Comment":"\u8bbe\u7f6e\u52a8\u753b\u5668\u7684\u901f\u5ea6\u53c2\u6570"},"ID":8,"Name":"Set
+        Float Parameter","Instant":true,"SharedGameObjecttargetGameObject":{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":null},"SharedStringparamaterName":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"speed"},"SharedFloatfloatValue":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0},"BooleansetOnce":false},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(73.9285355,120)"},"ID":9,"Name":"Wait","Instant":false,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":3}},{"Type":"TurnAround","NodeData":{"Offset":"(193.571442,120)"},"ID":10,"Name":"\u8f6c\u5411","Instant":false,"SharedVector2direction":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(1,0)"},"Booleaninvert":true,"SharedVector2result":{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(1,0)"}},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(308.260925,119.130432)"},"ID":11,"Name":"Wait","Instant":false,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.2},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"walkSpeed","IsShared":true,"Tooltip":"\u6b65\u884c\u901f\u5ea6","SinglemValue":1.5},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"runSpeed","IsShared":true,"SinglemValue":5},{"Type":"BehaviorDesigner.Runtime.SharedVector2","Name":"_velocity","IsShared":true,"Tooltip":"\u79fb\u52a8\u65b9\u5411","Vector2mValue":"(1,0)"}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
